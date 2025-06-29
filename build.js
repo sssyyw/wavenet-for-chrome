@@ -17,12 +17,10 @@ const SHARED_ENVIRONMENT_VARIABLES = {
 
 const PRODUCTION_ENVIRONMENT_VARIABLES = {
   ENVIRONMENT: 'production',
-  BACKEND_URL: 'https://api.wavenet-for-chrome.com/v1',
 }
 
 const DEVELOPMENT_ENVIRONMENT_VARIABLES = {
   ENVIRONMENT: 'development',
-  BACKEND_URL: 'http://localhost:4000/v1',
 }
 
 const ENVIRONMENT_VARIABLES =
