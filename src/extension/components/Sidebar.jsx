@@ -1,12 +1,9 @@
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
-  BarChart,
   Box,
-  CreditCard,
   GitHub,
   HelpCircle,
-  Key,
   Settings,
   Star,
 } from 'react-feather'
@@ -38,21 +35,6 @@ export function Sidebar() {
           </div>
         </div>
       </div>
-      <Sidebar.Item
-        Icon={sync.mode === 'paid' ? CreditCard : Key}
-        color="bg-green-500"
-        to="/billing"
-      >
-        {sync.mode === 'paid' ? 'Billing' : 'Credentials'}
-      </Sidebar.Item>
-      <Sidebar.Item
-        Icon={BarChart}
-        color="bg-sky-500"
-        to="/usage"
-        disabled={sync.mode === 'free' || !sync.user}
-      >
-        Usage
-      </Sidebar.Item>
       <Sidebar.Item Icon={Settings} color="bg-indigo-500" to="/preferences">
         Preferences
       </Sidebar.Item>
@@ -60,10 +42,7 @@ export function Sidebar() {
         Icon={Box}
         color="bg-purple-500"
         to="/sandbox"
-        disabled={
-          (sync.mode === 'free' && !sync.apiKeyValid) ||
-          (sync.mode === 'paid' && !sync.user?.credits)
-        }
+        disabled={!sync.apiKeyValid}
       >
         Sandbox
       </Sidebar.Item>

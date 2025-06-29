@@ -4,7 +4,6 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useMount } from '../hooks/useMount'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { Sidebar } from './components/Sidebar'
-import { Billing } from './components/views/Billing'
 import { Usage } from './components/views/Usage'
 import { Preferences } from './components/views/Preferences'
 import { Sandbox } from './components/views/Sandbox'
@@ -19,7 +18,7 @@ export const errorStore = createStore<null | TError>(null)
 export function Extension() {
   const navigate = useNavigate()
   const { ready } = useSync()
-  const [route, setRoute] = useLocalStorage('route', '/billing')
+  const [route, setRoute] = useLocalStorage('route', '/preferences')
   const [error, setError] = useStore(errorStore)
   const location = useLocation()
   useEffect(() => setRoute(location), [location])
@@ -42,7 +41,6 @@ export function Extension() {
       <Sidebar />
       <div className="w-full p-4 overflow-y-scroll bg-neutral-100 bg-opacity-60">
         <Routes>
-          <Route path="/billing" element={<Billing />} />
           <Route path="/usage" element={<Usage />} />
           <Route path="/preferences" element={<Preferences />} />
           <Route path="/sandbox" element={<Sandbox />} />
