@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { CreditCard, Key } from 'react-feather'
+import { Key } from 'react-feather'
 import { Text } from '../../../components/inputs/Text.jsx'
 import { Button } from '../../../components/Button.js'
 import { useSync } from '../../../hooks/useSync.js'
@@ -23,15 +23,7 @@ ApiKeyForm.Buttons = function ({ form, sync, setSync }) {
   return (
     <div className="flex">
       <Button
-        Icon={CreditCard}
-        onClick={() => setSync({ ...sync, mode: 'paid' })}
-      >
-        {sync.user?.credits > 0
-          ? 'Use credits instead'
-          : 'Purchase credits instead'}
-      </Button>
-      <Button
-        className="ml-2"
+        className="w-full"
         type="primary"
         Icon={Key}
         onClick={form.validate}

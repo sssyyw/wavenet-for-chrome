@@ -5,6 +5,7 @@ import { Command, Key } from 'react-feather'
 import { Button } from '../../../components/Button.js'
 import { useSession } from '../../../hooks/useSession.js'
 import { useSync } from '../../../hooks/useSync.js'
+import { ApiKeyForm } from '../forms/ApiKey.js'
 import {
   getLanguageOptions,
   getVoiceOptions,
@@ -73,6 +74,7 @@ const audioProfiles = [
 export function Preferences() {
   const { ready: sessionReady, session } = useSession()
   const { ready: syncReady, sync, setSync } = useSync()
+  const form = ApiKeyForm.Validator(() => {})
 
   if (!sessionReady || !syncReady) return null
   const languageOptions = getLanguageOptions(session)
@@ -83,7 +85,26 @@ export function Preferences() {
     <div className="flex flex-col gap-5">
       <div>
         <div className="font-semibold text-neutral-700 mb-1.5 ml-1 flex items-center">
-          Credentials
+          Google Cloud API Key
+        </div>
+        <div className="bg-white p-3 rounded shadow-sm border flex flex-col gap-4">
+          <ApiKeyForm.Content form={form} sync={sync} setSync={setSync} />
+          <div className="flex">
+            <Button
+              className="w-full"
+              type="primary"
+              Icon={Key}
+              onClick={form.validate}
+              submitting={form.validating}
+            >
+              Save API key
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div className="font-semibold text-neutral-700 mb-1.5 ml-1 flex items-center">
+          Voice Settings
         </div>
         <div className="bg-white p-3 rounded shadow-sm border flex flex-col gap-4">
           <div className="grid grid-cols-2 gap-4">
