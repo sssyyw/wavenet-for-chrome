@@ -111,7 +111,7 @@ class ParagraphButtonManager {
     const button = document.createElement('div')
     button.className = 'wavenet-play-button'
     button.innerHTML = `
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <polygon points="5,3 19,12 5,21" fill="currentColor"/>
       </svg>
     `
@@ -119,13 +119,13 @@ class ParagraphButtonManager {
     // Style the button
     Object.assign(button.style, {
       position: 'absolute',
-      left: '-40px',
-      top: '0px',
-      width: '32px',
-      height: '32px',
+      left: '-30px',
+      top: '2px',
+      width: '24px',
+      height: '24px',
       backgroundColor: '#3b82f6',
       color: 'white',
-      borderRadius: '16px',
+      borderRadius: '12px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -133,7 +133,7 @@ class ParagraphButtonManager {
       opacity: '0.3',
       transition: 'opacity 0.2s ease',
       zIndex: '1000',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
       border: 'none'
     })
 
@@ -192,7 +192,7 @@ class ParagraphButtonManager {
     
     // Update button to show stop icon
     button.innerHTML = `
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
         <rect x="6" y="6" width="12" height="12" fill="currentColor"/>
       </svg>
     `
@@ -215,7 +215,7 @@ class ParagraphButtonManager {
       if (button) {
         // Reset button to play icon
         button.innerHTML = `
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="5,3 19,12 5,21" fill="currentColor"/>
           </svg>
         `
