@@ -213,6 +213,28 @@ export function Preferences() {
       </div>
       <div>
         <div className="font-semibold text-neutral-700 mb-1.5 ml-1 flex items-center">
+          Features
+        </div>
+        <div className="bg-white p-3 rounded shadow-sm border">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium text-neutral-700">Paragraph Play Buttons</div>
+              <div className="text-sm text-neutral-500">Show play buttons next to paragraphs for quick text-to-speech</div>
+            </div>
+            <Button
+              type={sync.paragraphButtonsEnabled !== false ? "primary" : "secondary"}
+              onClick={() => setSync({ 
+                ...sync, 
+                paragraphButtonsEnabled: sync.paragraphButtonsEnabled === false ? true : false 
+              })}
+            >
+              {sync.paragraphButtonsEnabled !== false ? "Enabled" : "Disabled"}
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div className="font-semibold text-neutral-700 mb-1.5 ml-1 flex items-center">
           Shortcuts
         </div>
         <div className="grid gap-4 grid-cols-2 bg-white p-3 rounded shadow-sm border">

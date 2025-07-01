@@ -52,20 +52,57 @@ class ParagraphButtonManager {
   private buttons: Map<Element, HTMLElement> = new Map()
   private currentlyPlaying: Element | null = null
   private hasApiKey: boolean = false
+  private paragraphButtonsEnabled: boolean = true
 
   init(sync?: any) {
     console.log('ParagraphButtonManager initializing...', { sync })
     this.hasApiKey = sync?.apiKey ? true : false
+    this.paragraphButtonsEnabled = sync?.paragraphButtonsEnabled !== false // Default to true
     console.log('API key status:', this.hasApiKey)
+    console.log('Paragraph buttons enabled:', this.paragraphButtonsEnabled)
     
-    // Always add buttons, but they'll show different behavior based on API key
-    this.addButtonsToParagraphs()
+    // Only add buttons if the feature is enabled
+    if (this.paragraphButtonsEnabled) {
+      this.addButtonsToParagraphs()
+    } else {
+      this.removeAllButtons()
+    }
     this.observePageChanges()
     
     console.log('ParagraphButtonManager initialized')
   }
 
+  updateSettings(sync?: any) {
+    const wasEnabled = this.paragraphButtonsEnabled
+    this.hasApiKey = sync?.apiKey ? true : false
+    this.paragraphButtonsEnabled = sync?.paragraphButtonsEnabled !== false
+    
+    console.log('Settings updated - buttons enabled:', this.paragraphButtonsEnabled)
+    
+    if (this.paragraphButtonsEnabled && !wasEnabled) {
+      // Feature was just enabled
+      this.addButtonsToParagraphs()
+    } else if (!this.paragraphButtonsEnabled && wasEnabled) {
+      // Feature was just disabled
+      this.removeAllButtons()
+    }
+  }
+
+  private removeAllButtons() {
+    console.log('Removing all paragraph buttons')
+    this.buttons.forEach((button, paragraph) => {
+      button.remove()
+    })
+    this.buttons.clear()
+    this.currentlyPlaying = null
+  }
+
   private addButtonsToParagraphs() {
+    if (!this.paragraphButtonsEnabled) {
+      console.log('Paragraph buttons disabled, skipping')
+      return
+    }
+
     // Find all paragraph-like elements
     const paragraphs = document.querySelectorAll('p, article p, .content p, .post p, .article p, div[role="article"] p')
     
@@ -241,16 +278,19 @@ class ParagraphButtonManager {
           mutation.addedNodes.forEach((node) => {
             if (node.nodeType === Node.ELEMENT_NODE) {
               const element = node as Element
-              // Check if the added node contains paragraphs
-              const newParagraphs = element.querySelectorAll('p')
-              newParagraphs.forEach(p => {
-                if (this.shouldAddButton(p)) {
-                  this.addButton(p)
+              // Only add buttons if the feature is enabled
+              if (this.paragraphButtonsEnabled) {
+                // Check if the added node contains paragraphs
+                const newParagraphs = element.querySelectorAll('p')
+                newParagraphs.forEach(p => {
+                  if (this.shouldAddButton(p)) {
+                    this.addButton(p)
+                  }
+                })
+                // Also check if the node itself is a paragraph
+                if (element.tagName === 'P' && this.shouldAddButton(element)) {
+                  this.addButton(element)
                 }
-              })
-              // Also check if the node itself is a paragraph
-              if (element.tagName === 'P' && this.shouldAddButton(element)) {
-                this.addButton(element)
               }
             }
           })
@@ -269,19 +309,28 @@ class ParagraphButtonManager {
 function ContentScript() {
   const { sync, ready } = useSync()
   const [error, setError] = useState<null | TError>(null)
+  const [buttonManager] = useState(() => new ParagraphButtonManager())
   const handlers = { setError }
 
   useEffect(() => {
     if (ready) {
       console.log('Content script ready, initializing paragraph buttons...', { 
         apiKeyValid: sync.apiKeyValid, 
-        apiKey: sync.apiKey ? 'present' : 'missing' 
+        apiKey: sync.apiKey ? 'present' : 'missing',
+        paragraphButtonsEnabled: sync.paragraphButtonsEnabled
       })
-      // Initialize paragraph buttons when ready (will check API key in button manager)
-      const buttonManager = new ParagraphButtonManager()
+      // Initialize paragraph buttons when ready
       buttonManager.init(sync)
     }
-  }, [ready, sync.apiKeyValid, sync.apiKey])
+  }, [ready])
+
+  useEffect(() => {
+    if (ready) {
+      console.log('Sync settings changed, updating button manager...', sync)
+      // Update button manager when sync settings change
+      buttonManager.updateSettings(sync)
+    }
+  }, [ready, sync.apiKeyValid, sync.apiKey, sync.paragraphButtonsEnabled])
 
   async function handleMessages(request, sender, sendResponse) {
     console.log('Handling message...', request, sender, sendResponse)
